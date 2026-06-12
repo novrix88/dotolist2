@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+
+    <div class="logo">
+        To-Do App
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{% url 'home' %}">Home</a>
+
+        <a href="{% url 'logout' %}">Logout</a>
+
+    </div>
+
+</div>
+
+    <h1>My To-Do List</h1>
+
+    <!-- FILTERS -->
+    <div class="filters">
+
+        <a href="?filter=all"
+           class="{% if filter_type == 'all' or not filter_type %}active{% endif %}">
+            Все
+        </a>
+
+        <a href="?filter=progress"
+           class="{% if filter_type == 'progress' %}active{% endif %}">
+            В процессе
+        </a>
+
+        <a href="?filter=done"
+           class="{% if filter_type == 'done' %}active{% endif %}">
+            Сделано
+        </a>
+
+    </div>
+
+    <!-- FORM -->
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="title" placeholder="Введите задачу">
+
+        <button type="submit">
+            Добавить
+        </button>
+    </form>
+
+    <hr>
+
+    <!-- TASK LIST -->
+    {% for task in tasks %}
+
+    <div class="task-row">
+
+        <div class="task-title">
+            {{ task.title }}
+        </div>
+
+        <div class="task-actions">
+
+            <!-- TOGGLE -->
+            <a href="{% url 'toggle_task' task.id %}" class="btn done">
+                {% if task.completed %}
+                    В процессе
+                {% else %}
+                    Сделано
+                {% endif %}
+            </a>
+
+            <!-- EDIT -->
+            <a href="{% url 'edit_task' task.id %}" class="btn edit">
+                Изменить
+            </a>
+
+            <!-- DELETE -->
+            <a href="{% url 'delete_task' task.id %}"
+               class="btn delete"
+               onclick="return confirm('Удалить эту задачу?')">
+                Удалить
+            </a>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+        <p style="text-align:center;">Задач пока нет</p>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Изменить задачу</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+
+<div class="edit-page">
+
+    <h1>Изменить задачу</h1>
+
+    <form method="POST" class="edit-form">
+        {% csrf_token %}
+
+        <input type="text" name="title" value="{{ task.title }}">
+
+        <button type="submit">
+            Сохранить
+        </button>
+
+    </form>
+
+    <a href="{% url 'home' %}" class="back-btn">
+        ← Назад
+    </a>
+
+</div>
+
+</body>
+</html>
